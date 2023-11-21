@@ -24,6 +24,13 @@ class ScaffoldExample extends StatefulWidget {
 
 class _ScaffoldExampleState extends State<ScaffoldExample> {
   int _count = 0;
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +41,42 @@ class _ScaffoldExampleState extends State<ScaffoldExample> {
       body: Center(child: Text('You have pressed the button $_count times.')),
       backgroundColor: Colors.blueGrey.shade200,
       floatingActionButton: FloatingActionButton(
-        onPressed: () => setState(() => _count++),
+        onPressed: () => setState(() => ++_count),
         tooltip: 'Increment Counter',
         child: const Icon(Icons.add),
       ),
+      drawer: Drawer(
+          child: ListView(
+        //removing padding from the listview
+        padding: EdgeInsets.zero,
+        children: [
+          const DrawerHeader(
+            decoration: BoxDecoration(
+              color: Colors.blue,
+            ),
+            child: Text('Drawer Header'),
+          ),
+          ListTile(
+            title: const Text('List Tile 1'),
+            selected: _selectedIndex == 0,
+            onTap: () {
+              // Update the state of the app.
+              _onItemTapped(0);
+              //close the drawer
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            title: const Text('List Tile 2'),
+            selected: _selectedIndex == 1,
+            onTap: () {
+              // Update the state of the app.
+              _onItemTapped(1);
+              Navigator.pop(context);
+            },
+          ),
+        ],
+      )),
     );
   }
 }
